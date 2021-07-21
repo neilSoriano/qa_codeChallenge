@@ -39,4 +39,39 @@ describe("Employee Manager", () => {
       title: "Grand Poobah",
     });
   });
+  it("can add another employee", async () => {
+    await em.addEmployee();
+    await em.selectEmployeeByName("New Employee");
+    await em.editEmployee({
+      name: "Neil Soriano",
+      phone: "0824781627",
+      title: "QA Engineer"
+    });
+    await em.saveChanges();
+    await em.selectEmployeeByName("Bernice Ortiz");
+    await em.selectEmployeeByName("Neil Soriano");
+    let employee = await em.getEmployeeInfo();
+    expect(employee.name).toEqual("Neil Soriano");
+    expect(employee.phone).toEqual("0824781627");
+    expect(employee.title).toEqual("QA Engineer");
+  });
+  it("can cancel the edit of an employee", async () => {
+    await em.selectEmployeeByName("Dollie Berry");
+    await em.editEmployee({ title: "Software Engineer" });
+    await em.cancelChanges();
+    await em.selectEmployeeByName("Phillip Weaver");
+    await em.selectEmployeeByName("Dollie Berry");
+    let employee = await em.getEmployeeInfo();
+    expect(employee.title).toEqual("Front-End Developer");
+  });
+  it("cannot save changes when editing and navigating away without saving changes", async () => {
+    await em.selectEmployeeByName("Dollie Berry");
+    await em.editEmployee({ name: "Neil Soriano", phone: "123456789", title: "Software Engineer" });
+    await em.selectEmployeeByName("Teresa Osborne");
+    await em.selectEmployeeByName("Dollie Berry");
+    let employee = await em.getEmployeeInfo();
+    expect(employee.name).toEqual("Dollie Berry");
+    expect(employee.phone).toEqual("4873459812");
+    expect(employee.title).toEqual("Front-End Developer");
+  })
 });

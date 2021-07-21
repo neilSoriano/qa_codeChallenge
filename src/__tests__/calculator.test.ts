@@ -24,4 +24,30 @@ let dataset = [
   { x: 81, y: 227, method: "divide" },
 ];
 
-describe("Calculator", () => {});
+describe("Calculator", () => {
+  dataset.forEach((calcOperation) => {
+    test(`The ${calcOperation} method using ${calcOperation.x} and ${calcOperation.y}`, () => {
+      switch(calcOperation.method) {
+        case "add":
+          expect(calculator.add(calcOperation.x, calcOperation.y)).toEqual(calcOperation.x + calcOperation.y);
+          break;
+        
+        case "subtract":
+          expect(calculator.subtract(calcOperation.x, calcOperation.y)).toEqual(calcOperation.x - calcOperation.y);
+          break;
+
+        case "multiply":
+          expect(calculator.multiply(calcOperation.x, calcOperation.y)).toEqual(calcOperation.x * calcOperation.y);
+          break;
+
+        case "divide":
+          expect(calculator.divide(calcOperation.x, calcOperation.y)).toEqual(calcOperation.x / calcOperation.y);
+          break;
+
+        default:
+          console.log("That action does not exist");
+      }
+      
+    })
+  })
+});
